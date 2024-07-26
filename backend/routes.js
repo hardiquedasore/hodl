@@ -3,7 +3,7 @@ function routes(app, db){
     app.post('/upload', (req,res)=>{
         if(buffer && title){
 
-        }else{
+        } else{
             res.status(400).json({"status":"Failed", "reason":"wrong input"})
         }
     })
