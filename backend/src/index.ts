@@ -6,6 +6,7 @@ import cors from "cors";
 import mongoose from "mongoose";
 import authRoutes from "./routes/auth";
 import auth from "./middleware/auth";
+import reportRoutes from "./routes/report"
 
 const app = express();
 
@@ -13,6 +14,7 @@ app.use(cors({ credentials: true, }))
 app.use(express.json());
 
 app.use('/auth', authRoutes);
+app.use('/report', reportRoutes)
 
 app.listen(process.env.PORT || 8080, () => {
     console.log('app listening on http://localhost:8080/');
