@@ -3,6 +3,7 @@ dotenv.config()
 import express from "express";
 import Web3 from 'web3';
 import json from "../helper/json";
+import axios from 'axios';
 
 // truffle + web3 connection config
 const ReportContract = require('../../build/contracts/ReportHandler.json'); 
@@ -36,7 +37,11 @@ router.get('/:id', async(req, res) => {
         const reportJsonString = json(report)
         const reportData = JSON.parse(reportJsonString);
         const ipfsHash = reportData.reportHash;
-        res.json({ipfsHash});
+
+        const response = await axios.get(`https://gateway.pinata.cloud/ipfs/${ipfsHash}`);
+        const reportJsonData = response.data;
+
+        res.json({reportJsonData});
 
     } catch(error) {
         res.status(500).send(error.message);
@@ -80,5 +85,7 @@ router.post('/add', async (req, res) => {
         res.status(500).send(error.message);
     }
 });
+
+
 
 export default router;

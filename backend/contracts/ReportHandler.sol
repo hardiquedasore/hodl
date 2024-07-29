@@ -40,7 +40,7 @@ contract ReportHandler {
     }
 
     // Verifies a report, only manager address can call
-    function addVerifers(address verifer) public {
+    function addVerifier(address verifer) public {
         if (msg.sender != manager) {
             revert CallerNotManager();
         }

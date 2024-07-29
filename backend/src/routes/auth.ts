@@ -1,3 +1,5 @@
+import * as dotenv from 'dotenv'
+dotenv.config()
 import express from "express";
 import { UserModel } from "../db/user";
 import bcrypt from "bcryptjs";
@@ -22,7 +24,7 @@ router.post('/register', async (req, res) => {
 
         res.status(201).json({ result: user, token });
     } catch (error) {
-        res.status(500).json({ message: "Something went wrong" });
+        res.status(500).json(error.message);
     }
 });
 
@@ -40,7 +42,7 @@ router.post('/login', async (req, res) => {
 
         res.status(200).json({ result: user, token });
     } catch (error) {
-        res.status(500).json({ message: "Something went wrong" });
+        res.status(500).json(error.message);
     }
 });
 
