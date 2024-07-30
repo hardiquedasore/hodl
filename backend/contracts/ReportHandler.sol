@@ -9,8 +9,9 @@ contract ReportHandler {
     struct Report {
         string vendorName;
         uint256 distance;
-        uint256 emmissions;
-        string productType;
+        uint256 diesel;
+        uint256 electricity;
+        uint256 transport;
         string reportHash; // this should be an ipfs hash of the report
         bool verified;
     }
@@ -29,12 +30,13 @@ contract ReportHandler {
     function addReport(
         string memory vendorName,
         uint256 distance,
-        uint256 emissions,
-        string memory productType,
+        uint256 diesel,
+        uint256 electricity,
+        uint256 transport,
         string memory reportHash
     ) public returns (uint256 reportId) {
         reportId = reportCount;
-        reports[reportId] = Report(vendorName, distance, emissions, productType, reportHash, false);
+        reports[reportId] = Report(vendorName, distance, diesel, electricity, transport, reportHash, false);
         reportCount++;
         return reportId;
     }

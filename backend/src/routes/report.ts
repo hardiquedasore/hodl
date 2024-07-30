@@ -50,21 +50,23 @@ router.get('/:id', async(req, res) => {
 
 router.post('/add', async (req, res) => {
     try {
-        const { vendorName, distance, emissions, productType } = req.body;
+        const { vendorName, distance, diesel, electricity, transport } = req.body;
         const accounts = await web3.eth.getAccounts();
         const reportJson = {
             vendorName: vendorName,
             distance: distance,
-            emissions: emissions,
-            productType: productType
+            diesel: diesel,
+            electricity: electricity,
+            transport: transport,
         }
         const pinataRes = await pinata.pinJSONToIPFS(reportJson)
 
         const gasEstimateBigInt = await contract.methods.addReport(
             vendorName,
             distance,
-            emissions,
-            productType,
+            diesel,
+            electricity,
+            transport,
             pinataRes.IpfsHash
         ).estimateGas({ from: accounts[0] });
 
@@ -73,8 +75,9 @@ router.post('/add', async (req, res) => {
         const result = await contract.methods.addReport(
             vendorName,
             distance,
-            emissions,
-            productType,
+            diesel,
+            electricity,
+            transport,
             pinataRes.IpfsHash
         ).send({ from: accounts[0], gas: gasEstimate });
 
