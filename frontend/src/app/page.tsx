@@ -7,17 +7,12 @@ import { useState, useEffect } from 'react';
 import { table } from "console";
 
 type ReportData = {
-  transactionHash: string;
-  transactionIndex: string;
-  blockHash: string;
-  blockNumber: string;
-  from: string;
-  to: string;
-  gasUsed: string;
-  cumulativeGasUsed: string;
-  logs: any[];
-  status: string;
-  logsBloom: string;
+  vendorName: string;
+  distance: string;
+  diesel: string;
+  electricity: string;
+  transport: string;
+  total: string;
 };
 
 export default function Home() {
@@ -28,51 +23,50 @@ export default function Home() {
   const [diesel, setDiesel] = useState('');
   const [electricity, setElectricity] = useState('');
   const [transport, setTransport] = useState('');
-  const [dataTable, setDataTable] = useState([{"transactionHash":"0x9bdd6fd7af208ad19773198cefc0d9be93c5277514ab68c44bd9762f3ff5f59f","transactionIndex":"0","blockHash":"0xc6a04c5c8d5a9fab531ab4d00a5c250ecd830932a1d5d356546371558b8642dc","blockNumber":"5","from":"0x891069741c3736c2f5da16c29363687cb0a58233","to":"0x42881e277725c36ed67203e6da7dfd72243fbbb8","gasUsed":"217573","cumulativeGasUsed":"217573","logs":[],"status":"1","logsBloom":"0x00000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000"}]);
+  const [dataTable, setDataTable] = useState<ReportData[]>([]);
   useEffect(() => {
-    if (!token) {
+    if (token == undefined || token == null) {
       router.push('/sign-in');
       return;
+    }else{
+      fetchData();
     }
-
-    const fetchData = async () => {
-      try {
-        const response = await fetch('http://localhost:8080/report/all', {
-          method: 'GET',
-          headers: {
-            'Authorization': 'Bearer ' + token,
-            'Content-Type': 'application/json'
-          }
-        });
-        const data = await response.json();
-        console.log(data);
-        // if (data.countData) {
-        //   for (let i = 0; i < data.countData; i++) {
-        //     try {
-        //       const reportResponse = await fetch(`http://localhost:8080/report/${i}`, {
-        //         method: 'GET',
-        //         headers: {
-        //           'Authorization': 'Bearer ' + token,
-        //           'Content-Type': 'application/json'
-        //         }
-        //       });
-        //       const reportData = await reportResponse.json();
-        //       setDataTable(prevDataTable => [...prevDataTable, reportData.reportJsonData]);
-        //       console.log(reportData)
-
-        //     } catch (e) {
-        //       console.error(e);
-        //     }
-        //   }
-        // }
-      } catch (e) {
-        console.error(e);
-      }
-    };
-
-    fetchData();
   }, [token, router]);
+  const fetchData = async () => {
+    try {
+      const response = await fetch('http://localhost:8080/report/all', {
+        method: 'GET',
+        headers: {
+          'Authorization': 'Bearer ' + token,
+          'Content-Type': 'application/json'
+        }
+      });
+      const data = await response.json();
+      console.log(data);
+      setDataTable(data.reportList);
+      // if (data.countData) {
+      //   for (let i = 0; i < data.countData; i++) {
+      //     try {
+      //       const reportResponse = await fetch(`http://localhost:8080/report/${i}`, {
+      //         method: 'GET',
+      //         headers: {
+      //           'Authorization': 'Bearer ' + token,
+      //           'Content-Type': 'application/json'
+      //         }
+      //       });
+      //       const reportData = await reportResponse.json();
+      //       setDataTable(prevDataTable => [...prevDataTable, reportData.reportJsonData]);
+      //       console.log(reportData)
 
+      //     } catch (e) {
+      //       console.error(e);
+      //     }
+      //   }
+      // }
+    } catch (e) {
+      console.error(e);
+    }
+  };
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -98,6 +92,7 @@ export default function Home() {
       setElectricity('');
       setTransport('');
       router.push('/');
+      fetchData();
     }
     } catch(e){
       console.error(e)
@@ -191,11 +186,13 @@ export default function Home() {
   <table className="max-w-full divide-y-2 divide-gray-200 bg-white text-sm">
     <thead className="text-left">
       <tr>
-        <th className="p-2 w-1/6 font-medium text-gray-900">Transaction Index</th>
-        <th className="p-2 w-1/6 font-medium text-gray-900">Transaction  Hash</th>
-        <th className="p-2 w-1/6 font-medium text-gray-900">Block</th>
-        <th className="p-2 w-1/6 font-medium text-gray-900">Gas Used</th>
-        <th className="p-2 w-1/6 font-medium text-gray-900">Addresses</th>
+        <th className="p-2 w-1/6 font-medium text-gray-900">Vendor Name</th>
+        <th className="p-2 w-1/6 font-medium text-gray-900">Distance</th>
+        <th className="p-2 w-1/6 font-medium text-gray-900">Diesel</th>
+        <th className="p-2 w-1/6 font-medium text-gray-900">Electricity</th>
+        <th className="p-2 w-1/6 font-medium text-gray-900">Transport</th>
+        <th className="p-2 w-1/6 font-medium text-gray-900">Total</th>
+
       </tr>
     </thead>
 
@@ -203,11 +200,13 @@ export default function Home() {
         {
           dataTable.map((el, index)=> (
             <tr key={index}>
-                      <td className="p-2 font-medium text-gray-900">{el.transactionIndex}</td>
-                      <td className="p-2 w-1/6  text-wrap text-gray-700">{el.transactionHash}</td>
-                      <td className="p-2 text-gray-700"><strong>Block No: </strong>{el.blockNumber}<br/><strong>Block Hash:</strong> {el.blockHash}</td>
-                      <td className="p-2 text-gray-700">{el.gasUsed}</td>
-                      <td className="p-2 text-gray-700"><strong>From: </strong>{el.from}<br/><strong>To: </strong>{el.to}</td>                    
+                      <td className="p-2 font-medium text-gray-900">{el.vendorName}</td>
+                      <td className="p-2 w-1/6  text-wrap text-gray-700">{el.distance}</td>
+                      <td className="p-2 text-gray-700">{el.diesel}</td>
+                      <td className="p-2 text-gray-700">{el.electricity}</td>
+                      <td className="p-2 text-gray-700">{el.transport}</td>                   
+                      <td className="p-2 text-gray-700">{el.total}</td>                    
+
 </tr>
            )
           )
