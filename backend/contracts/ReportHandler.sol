@@ -12,6 +12,7 @@ contract ReportHandler {
         uint256 diesel;
         uint256 electricity;
         uint256 transport;
+        uint256 total;
         string reportHash; // this should be an ipfs hash of the report
         bool verified;
     }
@@ -33,10 +34,11 @@ contract ReportHandler {
         uint256 diesel,
         uint256 electricity,
         uint256 transport,
+        uint256 total,
         string memory reportHash
     ) public returns (uint256 reportId) {
         reportId = reportCount;
-        reports[reportId] = Report(vendorName, distance, diesel, electricity, transport, reportHash, false);
+        reports[reportId] = Report(vendorName, distance, diesel, electricity, transport, total, reportHash, false);
         reportCount++;
         return reportId;
     }

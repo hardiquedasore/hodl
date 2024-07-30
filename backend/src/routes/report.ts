@@ -4,6 +4,7 @@ import express from "express";
 import Web3 from 'web3';
 import json from "../helper/json";
 import axios from 'axios';
+import calculate_total from '../helper/report';
 
 // truffle + web3 connection config
 const ReportContract = require('../../build/contracts/ReportHandler.json'); 
@@ -58,6 +59,7 @@ router.post('/add', async (req, res) => {
             diesel: diesel,
             electricity: electricity,
             transport: transport,
+            total: calculate_total(diesel, electricity, transport)
         }
         const pinataRes = await pinata.pinJSONToIPFS(reportJson)
 
@@ -67,6 +69,7 @@ router.post('/add', async (req, res) => {
             diesel,
             electricity,
             transport,
+            Math.round( calculate_total(diesel, electricity, transport) ),
             pinataRes.IpfsHash
         ).estimateGas({ from: accounts[0] });
 
@@ -78,6 +81,7 @@ router.post('/add', async (req, res) => {
             diesel,
             electricity,
             transport,
+            Math.round( calculate_total(diesel, electricity, transport) ),
             pinataRes.IpfsHash
         ).send({ from: accounts[0], gas: gasEstimate });
 
