@@ -14,8 +14,18 @@ const SignIn = () => {
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     try{
-      const response = await signInWithEmailAndPassword(email, password);
-      console.log(response)
+      const response = await fetch('http://localhost:8080/auth/login', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json'
+        },
+        body: JSON.stringify({
+          email: email,
+          password: password
+        })
+      });
+      const data = await response.json();
+      sessionStorage.setItem('token', data.token)
       setEmail('');
       setPassword('');
       router.push('/');
@@ -34,7 +44,7 @@ const SignIn = () => {
             <input
               id="email"
               type="email"
-              className="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
+              className="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none"
               value={email}
               onChange={(e) => setEmail(e.target.value)}
               required
@@ -45,7 +55,7 @@ const SignIn = () => {
             <input
               id="password"
               type="password"
-              className="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
+              className="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none"
               value={password}
               onChange={(e) => setPassword(e.target.value)}
               required
