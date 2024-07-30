@@ -3,7 +3,7 @@ dotenv.config()
 import express from "express";
 import Web3 from 'web3';
 import json from "../helper/json";
-import axios from 'axios';
+import axios, { AxiosResponse } from 'axios';
 import calculate_total from '../helper/report';
 
 // truffle + web3 connection config
@@ -20,7 +20,7 @@ const pinata = new pinataSDK({ pinataJWTKey: process.env.PIN_KEY })
 const router = express.Router();
 
 
-router.get('/all', async (req, res) => {
+router.get('/allNum', async (req, res) => {
     try {
         const accounts = await web3.eth.getAccounts();
         const manager = accounts[0];
@@ -29,6 +29,29 @@ router.get('/all', async (req, res) => {
         const countJSONString = json(count)
         const countData = JSON.parse(countJSONString);
         res.json({ countData });
+    } catch (error) {
+        res.status(500).send(error.message);
+    }
+});
+
+router.get('/all', async (req, res) => {
+    try {
+        const accounts = await web3.eth.getAccounts();
+        const manager = accounts[0];
+
+        const allReports = await contract.methods.getAllReports().call();
+        const allReportsJSONString = json(allReports)
+        const allReportsData: string[] = JSON.parse(allReportsJSONString);
+
+        const reportList: AxiosResponse[] = []
+
+        for(const data of allReportsData) {
+            console.log(data)
+            const response = await axios.get(`https://gateway.pinata.cloud/ipfs/${data}`);
+            reportList.push(response.data)
+        }
+
+        res.json({ reportList });
     } catch (error) {
         res.status(500).send(error.message);
     }

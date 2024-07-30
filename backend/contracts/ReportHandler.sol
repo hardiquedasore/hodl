@@ -83,6 +83,15 @@ contract ReportHandler {
         return reportCount;
     }
 
+    // Get all reports
+    function getAllReports() public view returns (string[] memory) {
+        string[] memory allReports = new string[](reportCount);
+        for (uint256 i = 0; i < reportCount; i++) {
+            allReports[i] = reports[i].reportHash;
+        }
+        return allReports;
+    }
+
     error ReportDoesNotExist();
     error CallerNotManager();
     error CallerNotVerifier();
