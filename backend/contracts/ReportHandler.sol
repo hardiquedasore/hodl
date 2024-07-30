@@ -1,6 +1,6 @@
 /// SPDX-License-Identifier: UNLICENSED
 
-pragma solidity ^0.8.0;
+pragma solidity 0.8.21;
 
 /// @title Edited contract to agree on the lunch venue
 /// @author Kevin Mao
@@ -64,7 +64,7 @@ contract ReportHandler {
         if (reportId > reportCount) {
             revert ReportDoesNotExist();
         }
-        if (verifiers[msg.sender] = false) {
+        if (verifiers[msg.sender] == false) {
             revert CallerNotVerifier();
         }
         reports[reportId].verified = true;

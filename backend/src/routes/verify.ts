@@ -16,12 +16,42 @@ const router = express.Router();
 
 router.post('/', async(req, res) => {
     try {
-        const { reportId } = req.body;
-        const result = await contract.methods.verifyReport(reportId).call()
-        res.status(200).json({ message: "Report Verified" });
+        // if you can make the frontend be able to collect the user's meta mask address 
+        const { reportId } = req.body; // const { reportId, userAddress } = req.body
+        const result = await contract.methods.verifyReport(reportId).send({ from:  "0xb9a930f06443143b4612766AD0241148756902E4" }) // .send({ from: userAddress })
+        const resultJSONString = json(result)
+        const resultData = JSON.parse(resultJSONString);
+        res.status(200).json({ message: resultData});
     } catch(error) {
         res.status(500).json(error.message);
     }
+    
 })
+
+router.post('/addVerifier', async (req, res) => {
+    try {
+        const { verifierAddress } = req.body;
+        const accounts = await web3.eth.getAccounts();
+        const manager = accounts[0];
+
+        await contract.methods.addVerifier(verifierAddress).send({ from: manager });
+        res.status(200).json({ message: "Verifier Added" });
+    } catch (error) {
+        res.status(500).json({ error: error.message });
+    }
+});
+
+router.post('/removeVerifier', async (req, res) => {
+    try {
+        const { verifierAddress } = req.body;
+        const accounts = await web3.eth.getAccounts();
+        const manager = accounts[0];
+
+        await contract.methods.removeVerifier(verifierAddress).send({ from: manager });
+        res.status(200).json({ message: "Verifier Removed" });
+    } catch (error) {
+        res.status(500).json({ error: error.message });
+    }
+});
 
 export default router;

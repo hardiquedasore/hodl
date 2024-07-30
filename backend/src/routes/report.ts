@@ -22,6 +22,9 @@ const router = express.Router();
 
 router.get('/all', async (req, res) => {
     try {
+        const accounts = await web3.eth.getAccounts();
+        const manager = accounts[0];
+
         const count = await contract.methods.getReportsCount().call();
         const countJSONString = json(count)
         const countData = JSON.parse(countJSONString);
@@ -33,6 +36,9 @@ router.get('/all', async (req, res) => {
 
 router.get('/:id', async(req, res) => {
     try {
+        const accounts = await web3.eth.getAccounts();
+        const manager = accounts[0];
+
         const id = req.params.id;
         const report = await contract.methods.getReport(id).call();
         const reportJsonString = json(report)
@@ -42,7 +48,10 @@ router.get('/:id', async(req, res) => {
         const response = await axios.get(`https://gateway.pinata.cloud/ipfs/${ipfsHash}`);
         const reportJsonData = response.data;
 
-        res.json({reportJsonData});
+        res.json({ 
+            report: reportJsonData,
+            verfied: reportData.verified
+         });
 
     } catch(error) {
         res.status(500).send(error.message);
@@ -59,7 +68,7 @@ router.post('/add', async (req, res) => {
             diesel: diesel,
             electricity: electricity,
             transport: transport,
-            total: calculate_total(diesel, electricity, transport)
+            total: calculate_total(diesel, electricity, transport),
         }
         const pinataRes = await pinata.pinJSONToIPFS(reportJson)
 
