@@ -28,7 +28,7 @@ export default function Home() {
   const [diesel, setDiesel] = useState('');
   const [electricity, setElectricity] = useState('');
   const [transport, setTransport] = useState('');
-  const [dataTable, setDataTable] = useState<any[]>([]);
+  const [dataTable, setDataTable] = useState([{"transactionHash":"0x9bdd6fd7af208ad19773198cefc0d9be93c5277514ab68c44bd9762f3ff5f59f","transactionIndex":"0","blockHash":"0xc6a04c5c8d5a9fab531ab4d00a5c250ecd830932a1d5d356546371558b8642dc","blockNumber":"5","from":"0x891069741c3736c2f5da16c29363687cb0a58233","to":"0x42881e277725c36ed67203e6da7dfd72243fbbb8","gasUsed":"217573","cumulativeGasUsed":"217573","logs":[],"status":"1","logsBloom":"0x00000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000"}]);
   useEffect(() => {
     if (!token) {
       router.push('/sign-in');
@@ -188,15 +188,14 @@ export default function Home() {
   </form></div>
   <div>
 <div className="overflow-x-auto">
-  <table className="min-w-full divide-y-2 divide-gray-200 bg-white text-sm">
+  <table className="max-w-full divide-y-2 divide-gray-200 bg-white text-sm">
     <thead className="text-left">
       <tr>
-        <th className="p-2 font-medium text-gray-900">Transaction Index</th>
-        <th className="p-2 font-medium text-gray-900">Transaction  Hash</th>
-        <th className="p-2 font-medium text-gray-900">Block</th>
-        <th className="p-2 font-medium text-gray-900">Gas Used</th>
-        <th className="p-2 font-medium text-gray-900">From</th>
-        <th className="p-2">To</th>
+        <th className="p-2 w-1/6 font-medium text-gray-900">Transaction Index</th>
+        <th className="p-2 w-1/6 font-medium text-gray-900">Transaction  Hash</th>
+        <th className="p-2 w-1/6 font-medium text-gray-900">Block</th>
+        <th className="p-2 w-1/6 font-medium text-gray-900">Gas Used</th>
+        <th className="p-2 w-1/6 font-medium text-gray-900">Addresses</th>
       </tr>
     </thead>
 
@@ -205,13 +204,10 @@ export default function Home() {
           dataTable.map((el, index)=> (
             <tr key={index}>
                       <td className="p-2 font-medium text-gray-900">{el.transactionIndex}</td>
-                      <td className="p-2 text-gray-700">{el.transactionHash}</td>
-                      <td className="p-2 text-gray-700">Block No.: {el.blockNumber}<br/> Block Hash: {el.blockHash}</td>
+                      <td className="p-2 w-1/6  text-wrap text-gray-700">{el.transactionHash}</td>
+                      <td className="p-2 text-gray-700"><strong>Block No: </strong>{el.blockNumber}<br/><strong>Block Hash:</strong> {el.blockHash}</td>
                       <td className="p-2 text-gray-700">{el.gasUsed}</td>
-                      <td className="p-2 text-gray-700">{el.from}</td>
-                      <td className="p-2 text-gray-700">{el.to}</td>
-
-                    
+                      <td className="p-2 text-gray-700"><strong>From: </strong>{el.from}<br/><strong>To: </strong>{el.to}</td>                    
 </tr>
            )
           )
