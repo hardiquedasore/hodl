@@ -113,8 +113,8 @@ export default function Home() {
       <div className="flex flex-col p-8 z-10 w-full max-full font-mono text-sm lg:flex">
         <h1 className="text-4xl p-4 text-center">Reports</h1>
       </div>
-      <div className="grid grid-cols-1 gap-4 lg:grid-cols-1 lg:gap-8">
-  <div className="w-1/2">
+      <div className="grid grid-cols-1 gap-4 lg:grid-cols-2 lg:gap-8">
+  <div>
   <h1 className="text-2xl p-4 text-center">Add Report</h1>
   <form onSubmit={handleSubmit} className="space-y-6">
 
@@ -130,7 +130,7 @@ export default function Home() {
             />
           </div>
           <div>
-            <label htmlFor="distance" className="block text-sm font-medium text-gray-700">Distance</label>
+            <label htmlFor="distance" className="block text-sm font-medium text-gray-700">Distance (km)</label>
             <input
               id="distance"
               type="number"
@@ -141,7 +141,7 @@ export default function Home() {
             />
           </div>
           <div>
-            <label htmlFor="diesel" className="block text-sm font-medium text-gray-700">Diesel</label>
+            <label htmlFor="diesel" className="block text-sm font-medium text-gray-700">Diesel (L)</label>
             <input
               id="diesel"
               type="number"
@@ -152,7 +152,7 @@ export default function Home() {
             />
           </div>
           <div>
-            <label htmlFor="electricity" className="block text-sm font-medium text-gray-700">Electricity</label>
+            <label htmlFor="electricity" className="block text-sm font-medium text-gray-700">Electricity (kWh)</label>
             <input
               id="electricity"
               type="number"
@@ -163,7 +163,7 @@ export default function Home() {
             />
           </div>
           <div>
-            <label htmlFor="transport" className="block text-sm font-medium text-gray-700">Transport</label>
+            <label htmlFor="transport" className="block text-sm font-medium text-gray-700">Transport (km)</label>
             <input
               id="transport"
               type="number"
