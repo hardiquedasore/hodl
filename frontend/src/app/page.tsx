@@ -22,7 +22,6 @@ export default function Home() {
   const [distance, setDistance] = useState('');
   const [diesel, setDiesel] = useState('');
   const [electricity, setElectricity] = useState('');
-  const [transport, setTransport] = useState('');
   const [dataTable, setDataTable] = useState<ReportData[]>([]);
   useEffect(() => {
     if (token == undefined || token == null) {
@@ -42,27 +41,7 @@ export default function Home() {
         }
       });
       const data = await response.json();
-      console.log(data);
       setDataTable(data.reportList);
-      // if (data.countData) {
-      //   for (let i = 0; i < data.countData; i++) {
-      //     try {
-      //       const reportResponse = await fetch(`http://localhost:8080/report/${i}`, {
-      //         method: 'GET',
-      //         headers: {
-      //           'Authorization': 'Bearer ' + token,
-      //           'Content-Type': 'application/json'
-      //         }
-      //       });
-      //       const reportData = await reportResponse.json();
-      //       setDataTable(prevDataTable => [...prevDataTable, reportData.reportJsonData]);
-      //       console.log(reportData)
-
-      //     } catch (e) {
-      //       console.error(e);
-      //     }
-      //   }
-      // }
     } catch (e) {
       console.error(e);
     }
@@ -82,7 +61,7 @@ export default function Home() {
           vendorName: vendorName,
           distance: distance,
           diesel: diesel,
-          transport: transport,
+          transport: distance,
           electricity: electricity        })
       });
       const data = await response.json();
@@ -90,7 +69,6 @@ export default function Home() {
       setDiesel('');
       setDistance('');
       setElectricity('');
-      setTransport('');
       router.push('/');
       fetchData();
     }
@@ -162,17 +140,6 @@ export default function Home() {
               required
             />
           </div>
-          <div>
-            <label htmlFor="transport" className="block text-sm font-medium text-gray-700">Transport (km)</label>
-            <input
-              id="transport"
-              type="number"
-              className="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none"
-              value={transport}
-              onChange={(e) => setTransport(e.target.value)}
-              required
-            />
-          </div>
           <button
             type="submit"
             className="w-full mt-2 bg-indigo-600 text-white py-2 rounded-md shadow-sm hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500"
@@ -190,7 +157,6 @@ export default function Home() {
         <th className="p-2 w-1/6 font-medium text-gray-900">Distance</th>
         <th className="p-2 w-1/6 font-medium text-gray-900">Diesel</th>
         <th className="p-2 w-1/6 font-medium text-gray-900">Electricity</th>
-        <th className="p-2 w-1/6 font-medium text-gray-900">Transport</th>
         <th className="p-2 w-1/6 font-medium text-gray-900">Total</th>
 
       </tr>
@@ -204,7 +170,6 @@ export default function Home() {
                       <td className="p-2 w-1/6  text-wrap text-gray-700">{el.distance}</td>
                       <td className="p-2 text-gray-700">{el.diesel}</td>
                       <td className="p-2 text-gray-700">{el.electricity}</td>
-                      <td className="p-2 text-gray-700">{el.transport}</td>                   
                       <td className="p-2 text-gray-700">{el.total}</td>                    
 
 </tr>
